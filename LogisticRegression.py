@@ -22,15 +22,16 @@ class LinearRegression:
         sum /= len(y)
         sum *= -1
         
-        reg = 0
-        for weight in self.w:
-            reg += (weight[0] ** 2)
-        reg = reg * self.regularization / (2 * self.n_features)
-        sum += reg
+        if self.regularization != 0:
+            reg = 0
+            for weight in self.w:
+                reg += (weight[0] ** 2)
+            reg = reg * self.regularization / (2 * self.n_features)
+            sum += reg
         return sum
     
     def gradient_w(self,x,y,y_pred):
-        return np.transpose(np.matmul(np.transpose(y_pred - y),x)/(len(x))) + self.w * (self.regularization/self.n_features)
+        return np.transpose(np.matmul(np.transpose(y_pred - y),x)/(len(x))) + (self.regularization / self.n_features ) * self.w
     def gradient_b(self, y,y_pred):
         return (y_pred - y).mean()
     def train(self,x,y,nr_epochs,learning_rate):
@@ -52,3 +53,4 @@ class LinearRegression:
             if (ans == y[i][0]):
                 nr_correct += 1
         return nr_correct/len(x)
+
